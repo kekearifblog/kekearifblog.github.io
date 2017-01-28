@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How To Implement WeChat Login In iOS Swift</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/assets/css/social-share-kit.css" type="text/css">
+
+  <!-- Font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Keke Arif" href="/feed.xml" />
+  <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How To Implement WeChat Login In iOS Swift - Keke Arif</title>
+<meta property="og:title" content="How To Implement WeChat Login In iOS Swift" />
+<meta name="description" content="Here we can see the description in the post." />
+<meta property="og:description" content="Here we can see the description in the post." />
+<link rel="canonical" href="http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" />
+<meta property="og:url" content="http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" />
+<meta property="og:site_name" content="Keke Arif" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-01-03T00:00:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How To Implement WeChat Login In iOS Swift",
+"datePublished": "2017-01-03T00:00:00+08:00",
+"description": "Here we can see the description in the post.",
+"url": "http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-89675183-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <header>
+  <h1 class="header-small">
+    <a href="http://localhost:4000">Keke Arif</a>
+  </h1>
+</header>
+<div class="post">
+  <h1 class="post-title">How To Implement WeChat Login In iOS Swift</h1>
+  <span class="post-date">
+    <time>03 Jan 2017</time>
+  </span>
+  <div class="post-tag">
+    <ul>
+      
+      <li>
+        <a href="http://localhost:4000/tags#iOS" class="tag">
+          <span class="term">iOS</span>
+        </a>
+      </li>
+      
+      
+    </ul>
+  </div>
+
+  <p>I was recently given the challenge of implementing WeChat login for my company’s app. For anyone who isn’t familiar, WeChat is China’s most popular mobile messaging app similar to the likes of
+WhatsApp and Facebook Messenger. WeChat also has a huge number of additional features such as payments, mobile account top up and bots. It essential for daily life in China and is a great alternative login (as Facebook is blocked in China!) for any app. Figuring out how to set this up proved pretty tricky due to the English version of the docs/SDK not really giving the full picture, but this is how I did it:</p>
+
+<h4 id="setup-the-wechat-sdk">1 - Setup the WeChat SDK:</h4>
+
+<p>Firstly you will need to apply for a WeChat ID, the English site is at <a href="http://open.wechat.com">http://open.wechat.com</a> and the Chinese: <a href="http://open.weixin.qq.com">http://open.weixin.qq.com</a>. It may only be possible to get the ID using the Chinese site so you will need to enlist the help of a Chinese speaker or Google Translate &lt;img class=’emoji’ title=’<img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://assets.github.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20" align="absmiddle" />’ alt=’<img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://assets.github.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20" align="absmiddle" />’ src=’https://assets.github.com/images/icons/emoji/unicode/1f61c.png’ height=’20’ width=’20’ align=’absmiddle’ /&gt;. Now there are also two different versions of the SDK, the Chinese and English version. <strong>Forget</strong> the English version, I found it wasn’t as current as the Chinese one and actually missing some of the important methods needed to get the login working. Get the latest Chinese version <a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419319164&amp;token=&amp;lang=zh_CN">here</a> which is 1.7.5 at the time of writing. Copy the files into your project folder and create a new group for organization sake.</p>
+
+<p><img src="http://localhost:4000/assets/images/wechat-organized.png" alt="File organization" />
+As there are several Objective-C header (.h) files we need to add them to our projects Bridging Header file like so:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="cp">#import "WXApi.h"</span></code></pre></figure>
+
+<p>Next go to the <em>General</em> tab and scroll down to <em>Linked Frameworks and Libraries</em> and add the following:</p>
+
+<ul>
+  <li>libc++.tbd</li>
+  <li>CoreTelephony.framework</li>
+  <li>libsqlite3.tbd</li>
+  <li>libz.tbd</li>
+  <li>SystemConfiguration.framework</li>
+  <li>libWeChatSDK.a</li>
+</ul>
+
+<p>Finally we need to add the URL Scheme. Just go to the <em>Info</em> tab in your project and expand <em>URL Types</em>. Add a type with the identifier <em>weixin</em> and the <em>URL Schemes</em> set to the WeChat AppID you got when registering your app.</p>
+
+<p><img src="http://localhost:4000/assets/images/wechat-url.png" alt="WeChat URL Scheme" /></p>
+
+
+
+  <!-- Share -->
+  
+  <div class="post-share">
+    <hr>
+    <span>Share this: <br /></span>
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-facebook"></a>
+<a href="https://twitter.com/intent/tweet?text=How To Implement WeChat Login In iOS Swift&url=http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-twitter"></a>
+<a href="https://plus.google.com/share?url=http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-google-plus"></a>
+<a href="https://www.tumblr.com/share?url=http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-tumblr"></a>
+<a href="mailto:?subject=How To Implement WeChat Login In iOS Swift&amp;body=Check out this site http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/" class="ssk ssk-icon ssk-email"></a>
+
+    <hr>
+  </div>
+  
+
+  <!-- Disqus -->
+  
+  <section id="disqus_thread"></section>
+  <script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//kekearif.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+	<hr />
+	<div class="footer-link">
+		
+
+		
+		<a href="https://twitter.com/keke_arif"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+		
+
+		
+
+		
+
+		
+
+		
+		<a href="mailto:kekearif@googlemail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+		
+
+		
+		<a href="https://github.com/kekearif"><i class="fa fa-github" aria-hidden="true"></i></a>
+		
+
+		
+		<a href="http://www.kekearif.com/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a>
+		
+
+	</div>
+	© 2017 Keke Arif. All rights reserved.
+</div>
+
+  </div>
+</body>
+</html>

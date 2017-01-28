@@ -1,0 +1,9 @@
+TODO:
+
+make the code a little wider
+change faviicon
+Why does hovering over the links in Safari show “untitled” etc? This is on the main page
+add SEO
+add RSS Feed? - now use the footer.html and add in the rss feed image! - check the message it gives back. Looekd weird. I can see this message if I try to add it to the google RSS feed plugin.
+
+
