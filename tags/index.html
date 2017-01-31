@@ -29,14 +29,6 @@ permalink: /tags/
 {% for item in (0..site.tags.size) %}{% unless forloop.last %}
   {% capture this_tag %}{{ tags_list[item] | strip_newlines }}{% endcapture %}
 	<article>
-    <!-- Code to unhighlight a post when back is tapped on touch devices -->
-    <script>
-      document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
-          document.documentElement.classList.add('can-touch') // add "can-touch" class to document root using classList API
-          document.removeEventListener('touchstart', addtouchclass, false) // de-register touchstart event
-      }, false)
-    </script>
-    <!-- Code to unhighlight a post when back is tapped on touch devices -->
 
 	<div class="tag-title" id="{{ this_tag }}">
     {{ this_tag }}
