@@ -85,9 +85,7 @@ WhatsApp and Facebook Messenger. WeChat also has a huge number of additional fea
 <p>Firstly you will need to apply for a WeChat ID, the English site is at <a href="http://open.wechat.com">http://open.wechat.com</a> and the Chinese: <a href="http://open.weixin.qq.com">http://open.weixin.qq.com</a>. It may only be possible to get the ID using the Chinese site so you will need to enlist the help of a Chinese speaker or Google Translate &lt;img class=’emoji’ title=’<img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://assets.github.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20" align="absmiddle" />’ alt=’<img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://assets.github.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20" align="absmiddle" />’ src=’https://assets.github.com/images/icons/emoji/unicode/1f61c.png’ height=’20’ width=’20’ align=’absmiddle’ /&gt;. Now there are also two different versions of the SDK, the Chinese and English version. <strong>Forget</strong> the English version, I found it wasn’t as current as the Chinese one and actually missing some of the important methods needed to get the login working. Get the latest Chinese version <a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419319164&amp;token=&amp;lang=zh_CN">here</a> which is 1.7.5 at the time of writing. Copy the files into your project folder and create a new group for organization sake.</p>
 
 <p><img src="http://localhost:4000/assets/images/wechat-organized.png" alt="File organization" />
-As there are several Objective-C header (.h) files we need to add them to our projects Bridging Header file like so:</p>
-
-<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="cp">#import "WXApi.h"</span></code></pre></figure>
+As there are several Objective-C header (.h) files we need to add them to our projects Bridging Header file like e.g. <code class="highlighter-rouge">#import "WXApi.h" </code></p>
 
 <p>Next go to the <em>General</em> tab and scroll down to <em>Linked Frameworks and Libraries</em> and add the following:</p>
 
@@ -100,9 +98,107 @@ As there are several Objective-C header (.h) files we need to add them to our pr
   <li>libWeChatSDK.a</li>
 </ul>
 
-<p>Finally we need to add the URL Scheme. Just go to the <em>Info</em> tab in your project and expand <em>URL Types</em>. Add a type with the identifier <em>weixin</em> and the <em>URL Schemes</em> set to the WeChat AppID you got when registering your app.</p>
+<p>We also need to add the URL Scheme. Just go to the <em>Info</em> tab in your project and expand <em>URL Types</em>. Add a type with the identifier <em>weixin</em> and the <em>URL Schemes</em> set to the WeChat AppID you got when registering your app.</p>
 
 <p><img src="http://localhost:4000/assets/images/wechat-url.png" alt="WeChat URL Scheme" /></p>
+
+<p>Finally right click on the <code class="highlighter-rouge">Info.plist</code> and edit source to look like so:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="kt">LSApplicationQueriesSchemes</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">array</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">weixin</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">array</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="kt">NSAppTransportSecurity</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="kt">NSAllowsArbitraryLoads</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="kc">true</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>This is necessary because iOS9 limits HTTP access.</p>
+
+<h4 id="using-the-api">2 - Using the API</h4>
+
+<p>We need to first add some code to <code class="highlighter-rouge">AppDelegate.swift</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">@UIApplicationMain</span>
+<span class="kd">class</span> <span class="kt">AppDelegate</span><span class="p">:</span> <span class="kt">UIResponder</span><span class="p">,</span> <span class="kt">UIApplicationDelegate</span><span class="p">,</span> <span class="kt">WXApiDelegate</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">window</span><span class="p">:</span> <span class="kt">UIWindow</span><span class="p">?</span>
+
+
+    <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span> <span class="nv">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSObject</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+
+        <span class="c1">// WeChat: use your AppID</span>
+        <span class="kt">WXApi</span><span class="o">.</span><span class="nf">registerApp</span><span class="p">(</span><span class="s">"wx235325325"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">handleOpenURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">WXApi</span><span class="o">.</span><span class="nf">handleOpenURL</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">openURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">,</span> <span class="nv">sourceApplication</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">annotation</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">WXApi</span><span class="o">.</span><span class="nf">handleOpenURL</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">onReq</span><span class="p">(</span><span class="nv">req</span><span class="p">:</span> <span class="kt">BaseReq</span><span class="o">!</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Unused</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">onResp</span><span class="p">(</span><span class="nv">resp</span><span class="p">:</span> <span class="kt">BaseResp</span><span class="o">!</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Where the magic happens</span>
+    <span class="p">}</span>
+
+<span class="p">}</span></code></pre></figure>
+
+<p>Notice the method <code class="highlighter-rouge">func onResp(resp: BaseResp!)</code>, this is where the authorization code will appear that is used to make login requests. First we must request this code (this can be done anywhere in your app):</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">req</span> <span class="o">=</span> <span class="kt">SendAuthReq</span><span class="p">()</span>
+<span class="n">req</span><span class="o">.</span><span class="n">scope</span> <span class="o">=</span> <span class="s">"snsapi_userinfo"</span> <span class="c1">//Important that this is the same</span>
+<span class="n">req</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">"co.company.yourapp_wx_login"</span> <span class="c1">//This can be any random value</span>
+<span class="kt">WXApi</span><span class="o">.</span><span class="nf">sendReq</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">scope</code> must be specified to <code class="highlighter-rouge">snsapi_userinfo</code> and the <code class="highlighter-rouge">state</code> is really just any identifer you would like to use. This should return a code to <code class="highlighter-rouge">func onResp(resp: BaseResp!)</code>. I implemented the method like so - triggering a notification:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">onResp</span><span class="p">(</span><span class="nv">resp</span><span class="p">:</span> <span class="kt">BaseResp</span><span class="o">!</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">authResp</span> <span class="o">=</span> <span class="n">resp</span> <span class="k">as?</span> <span class="kt">SendAuthResp</span> <span class="p">{</span>
+
+            <span class="k">if</span> <span class="n">authResp</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+
+                <span class="k">let</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"response"</span><span class="p">:</span> <span class="n">authResp</span><span class="o">.</span><span class="n">code</span><span class="p">]</span>
+                <span class="kt">NSNotificationCenter</span><span class="o">.</span><span class="nf">defaultCenter</span><span class="p">()</span><span class="o">.</span><span class="nf">postNotificationName</span><span class="p">(</span><span class="s">"WeChatAuthCodeResp"</span><span class="p">,</span> <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="n">dict</span><span class="p">)</span>
+
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+                <span class="k">let</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"response"</span><span class="p">:</span> <span class="s">"Fail"</span><span class="p">]</span>
+                <span class="kt">NSNotificationCenter</span><span class="o">.</span><span class="nf">defaultCenter</span><span class="p">()</span><span class="o">.</span><span class="nf">postNotificationName</span><span class="p">(</span><span class="s">"WeChatAuthCodeResp"</span><span class="p">,</span> <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="n">dict</span><span class="p">)</span>
+
+            <span class="p">}</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+            <span class="k">let</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"response"</span><span class="p">:</span> <span class="s">"Fail"</span><span class="p">]</span>
+            <span class="kt">NSNotificationCenter</span><span class="o">.</span><span class="nf">defaultCenter</span><span class="p">()</span><span class="o">.</span><span class="nf">postNotificationName</span><span class="p">(</span><span class="s">"WeChatAuthCodeResp"</span><span class="p">,</span> <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="n">dict</span><span class="p">)</span>
+        <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>With the code we can now try and get the <code class="highlighter-rouge">openID</code> and the <code class="highlighter-rouge">accessToken</code>. To do this we need to build a link using the <code class="highlighter-rouge">appID</code>, <code class="highlighter-rouge">appSecret</code> and do a HTTP GET request. The <code class="highlighter-rouge">appID</code> and <code class="highlighter-rouge">appSecret</code> are details you get when you register the app with WeChat. Example like so:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="k">let</span> <span class="nv">appID</span> <span class="o">=</span> <span class="s">"somecode2132113"</span>
+<span class="kd">private</span> <span class="k">let</span> <span class="nv">appSecret</span> <span class="o">=</span> <span class="s">"someappsecret213123"</span>
+
+<span class="kd">private</span> <span class="k">let</span> <span class="nv">accessTokenPrefix</span> <span class="o">=</span> <span class="s">"https://api.weixin.qq.com/sns/oauth2/access_token?"</span>
+
+<span class="kd">private</span> <span class="kd">func</span> <span class="nf">buildAccessTokenLink</span><span class="p">(</span><span class="n">withCode</span> <span class="nv">code</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+
+        <span class="k">return</span> <span class="n">accessTokenPrefix</span> <span class="o">+</span> <span class="s">"appid="</span> <span class="o">+</span> <span class="n">appID</span> <span class="o">+</span> <span class="s">"&amp;secret="</span> <span class="o">+</span> <span class="n">appSecret</span> <span class="o">+</span> <span class="s">"&amp;code="</span> <span class="o">+</span> <span class="n">code</span> <span class="o">+</span> <span class="s">"&amp;grant_type=authorization_code"</span>
+
+<span class="p">}</span></code></pre></figure>
+
 
 
 

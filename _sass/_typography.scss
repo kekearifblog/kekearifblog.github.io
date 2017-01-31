@@ -176,10 +176,10 @@ pre {
 
 code {
   padding: .25em .5em;
-  font-size: 85%;
+  font-size: 100%;
   color: $code-color;
   background-color: $code-background-color;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 pre {
@@ -198,7 +198,7 @@ pre {
 
 pre code {
   padding: 0;
-  font-size: 100%;
+  font-size: 13px; // This is the size for the main code blocks
   color: inherit;
   background-color: transparent;
 }

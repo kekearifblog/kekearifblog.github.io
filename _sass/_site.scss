@@ -376,9 +376,9 @@ body {
 
   pre,
   code {
-      font-size: 13px;
-      border: 1px solid $base-color;
-      border-radius: 1px;
+      font-size: 16px; // This is the size for the inline blocks
+      color: $code-color;
+      background-color: $code-background-color;
   }
 
   code {
