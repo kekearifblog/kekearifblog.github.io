@@ -7,15 +7,14 @@
 		
 			<item>
 				<title>How To Implement WeChat Login In iOS Swift</title>
-        <description>&lt;p&gt;I was recently given the challenge of implementing WeChat login for my company’s app. For anyone who isn’t familiar, WeChat is China’s most popular mobile messaging app similar to the likes of
-WhatsApp and Facebook Messenger. WeChat also has a huge number of additional features such as payments, mobile account top up and bots. It essential for daily life in China and is a great alternative login (as Facebook is blocked in China!) for any app. Figuring out how to set this up proved pretty tricky due to the English version of the docs/SDK not really giving the full picture, but this is how I did it:&lt;/p&gt;
+        <description>&lt;p&gt;I recently had to implement WeChat login in one of my apps. For anyone who isn’t familiar, WeChat is China’s most popular mobile messaging platform similar to the likes of WhatsApp and Facebook Messenger. WeChat also has a huge number of additional features such as payments, mobile account top-up and bots. It is essential for daily life in China and a great alternative login (remember Facebook is blocked in China!). Figuring out how to set it up proved pretty tricky due to the English version of the docs/SDK not really giving the full picture, but this is how to do it:&lt;/p&gt;
 
 &lt;h4 id=&quot;setup-the-wechat-sdk&quot;&gt;1 - Setup the WeChat SDK:&lt;/h4&gt;
 
-&lt;p&gt;Firstly you will need to apply for a WeChat ID, the English site is at &lt;a href=&quot;http://open.wechat.com&quot;&gt;http://open.wechat.com&lt;/a&gt; and the Chinese: &lt;a href=&quot;http://open.weixin.qq.com&quot;&gt;http://open.weixin.qq.com&lt;/a&gt;. It may only be possible to get the ID using the Chinese site so you will need to enlist the help of a Chinese speaker or Google Translate &amp;lt;img class=’emoji’ title=’&lt;img class=&quot;emoji&quot; title=&quot;:stuck_out_tongue_winking_eye:&quot; alt=&quot;:stuck_out_tongue_winking_eye:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/1f61c.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt;’ alt=’&lt;img class=&quot;emoji&quot; title=&quot;:stuck_out_tongue_winking_eye:&quot; alt=&quot;:stuck_out_tongue_winking_eye:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/1f61c.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt;’ src=’https://assets.github.com/images/icons/emoji/unicode/1f61c.png’ height=’20’ width=’20’ align=’absmiddle’ /&amp;gt;. Now there are also two different versions of the SDK, the Chinese and English version. &lt;strong&gt;Forget&lt;/strong&gt; the English version, I found it wasn’t as current as the Chinese one and actually missing some of the important methods needed to get the login working. Get the latest Chinese version &lt;a href=&quot;https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;amp;t=resource/res_list&amp;amp;verify=1&amp;amp;id=open1419319164&amp;amp;token=&amp;amp;lang=zh_CN&quot;&gt;here&lt;/a&gt; which is 1.7.5 at the time of writing. Copy the files into your project folder and create a new group for organization sake.&lt;/p&gt;
+&lt;p&gt;Firstly you will need to apply for a WeChat ID, the English site is at &lt;a href=&quot;http://open.wechat.com&quot;&gt;http://open.wechat.com&lt;/a&gt; and the Chinese: &lt;a href=&quot;http://open.weixin.qq.com&quot;&gt;http://open.weixin.qq.com&lt;/a&gt;. It may only be possible to get the ID using the Chinese site so you will need to enlist the help of a Chinese speaker or Google Translate &amp;lt;img class=’emoji’ title=’&lt;img class=&quot;emoji&quot; title=&quot;:stuck_out_tongue_winking_eye:&quot; alt=&quot;:stuck_out_tongue_winking_eye:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/1f61c.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt;’ alt=’&lt;img class=&quot;emoji&quot; title=&quot;:stuck_out_tongue_winking_eye:&quot; alt=&quot;:stuck_out_tongue_winking_eye:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/1f61c.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt;’ src=’https://assets.github.com/images/icons/emoji/unicode/1f61c.png’ height=’20’ width=’20’ align=’absmiddle’ /&amp;gt;. There are also two different versions of the SDK, the Chinese and English version. &lt;strong&gt;DO NOT&lt;/strong&gt; use the English version, I found it wasn’t as current as the Chinese one and actually missing some of the important methods needed to get the login working. Get the latest Chinese version &lt;a href=&quot;https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;amp;t=resource/res_list&amp;amp;verify=1&amp;amp;id=open1419319164&amp;amp;token=&amp;amp;lang=zh_CN&quot;&gt;here&lt;/a&gt; which is &lt;em&gt;1.7.5&lt;/em&gt; at the time of writing. Copy the files into your project folder and create a new group for organization sake.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/wechat-organized.png&quot; alt=&quot;File organization&quot; /&gt;
-As there are several Objective-C header (.h) files we need to add them to our projects Bridging Header file like e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;#import &quot;WXApi.h&quot; &lt;/code&gt;&lt;/p&gt;
+As there are several Objective-C header (.h) files we need to add them to our projects Bridging Header file, just &lt;code class=&quot;highlighter-rouge&quot;&gt;#import &quot;WXApi.h&quot;&lt;/code&gt; will suffice.&lt;/p&gt;
 
 &lt;p&gt;Next go to the &lt;em&gt;General&lt;/em&gt; tab and scroll down to &lt;em&gt;Linked Frameworks and Libraries&lt;/em&gt; and add the following:&lt;/p&gt;
 
@@ -28,7 +27,7 @@ As there are several Objective-C header (.h) files we need to add them to our pr
   &lt;li&gt;libWeChatSDK.a&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;We also need to add the URL Scheme. Just go to the &lt;em&gt;Info&lt;/em&gt; tab in your project and expand &lt;em&gt;URL Types&lt;/em&gt;. Add a type with the identifier &lt;em&gt;weixin&lt;/em&gt; and the &lt;em&gt;URL Schemes&lt;/em&gt; set to the WeChat AppID you got when registering your app.&lt;/p&gt;
+&lt;p&gt;We also need to add the URL Scheme. Just go to the &lt;em&gt;Info&lt;/em&gt; tab in your project and expand &lt;em&gt;URL Types&lt;/em&gt;. Add a type with the identifier &lt;code class=&quot;highlighter-rouge&quot;&gt;weixin&lt;/code&gt; and the &lt;em&gt;URL Schemes&lt;/em&gt; set to the WeChat AppID you got when registering your app.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/wechat-url.png&quot; alt=&quot;WeChat URL Scheme&quot; /&gt;&lt;/p&gt;
 
@@ -48,7 +47,7 @@ As there are several Objective-C header (.h) files we need to add them to our pr
 
 &lt;h4 id=&quot;using-the-api&quot;&gt;2 - Using the API&lt;/h4&gt;
 
-&lt;p&gt;We need to first add some code to &lt;code class=&quot;highlighter-rouge&quot;&gt;AppDelegate.swift&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;We need to first add some code to &lt;code class=&quot;highlighter-rouge&quot;&gt;AppDelegate.swift&lt;/code&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIKit&lt;/span&gt;
 
@@ -84,14 +83,14 @@ As there are several Objective-C header (.h) files we need to add them to our pr
 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Notice the method &lt;code class=&quot;highlighter-rouge&quot;&gt;func onResp(resp: BaseResp!)&lt;/code&gt;, this is where the authorization code will appear that is used to make login requests. First we must request this code (this can be done anywhere in your app):&lt;/p&gt;
+&lt;p&gt;Notice the method &lt;code class=&quot;highlighter-rouge&quot;&gt;func onResp(resp: BaseResp!)&lt;/code&gt;, this is where the authorization code will appear that is used to make login requests. First we must request this code. We do this when the user taps the &lt;em&gt;“Login with WeChat”&lt;/em&gt; button like so:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;req&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SendAuthReq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;snsapi_userinfo&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//Important that this is the same&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;co.company.yourapp_wx_login&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//This can be any random value&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;WXApi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sendReq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;scope&lt;/code&gt; must be specified to &lt;code class=&quot;highlighter-rouge&quot;&gt;snsapi_userinfo&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; is really just any identifer you would like to use. This should return a code to &lt;code class=&quot;highlighter-rouge&quot;&gt;func onResp(resp: BaseResp!)&lt;/code&gt;. I implemented the method like so - triggering a notification:&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;scope&lt;/code&gt; must be specified to &lt;code class=&quot;highlighter-rouge&quot;&gt;snsapi_userinfo&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; is really just any identifer you would like to use. This will open WeChat, ask the user for authorization and then return a code to &lt;code class=&quot;highlighter-rouge&quot;&gt;func onResp(resp: BaseResp!)&lt;/code&gt;. I implemented the method like so - triggering a notification:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onResp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;BaseResp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 
@@ -116,7 +115,7 @@ As there are several Objective-C header (.h) files we need to add them to our pr
         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;With the code we can now try and get the &lt;code class=&quot;highlighter-rouge&quot;&gt;openID&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt;. To do this we need to build a link using the &lt;code class=&quot;highlighter-rouge&quot;&gt;appID&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;appSecret&lt;/code&gt; and do a HTTP GET request. The &lt;code class=&quot;highlighter-rouge&quot;&gt;appID&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;appSecret&lt;/code&gt; are details you get when you register the app with WeChat. Example like so:&lt;/p&gt;
+&lt;p&gt;With the authorization code we can now try build a link to get the &lt;code class=&quot;highlighter-rouge&quot;&gt;openID&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt;, these are used for the &lt;em&gt;OAuth&lt;/em&gt; login.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;appID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;somecode2132113&quot;&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;appSecret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;someappsecret213123&quot;&lt;/span&gt;
@@ -129,42 +128,27 @@ As there are several Objective-C header (.h) files we need to add them to our pr
 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-</description>
-				<pubDate>Tue, 03 Jan 2017 00:00:00 +0800</pubDate>
-				<link>http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/</link>
-				<guid isPermaLink="true">http://localhost:4000/2017-01-03/how-to-implement-ios-wechat-login/</guid>
-			</item>
-		
-			<item>
-				<title>A Test Blog Post</title>
-        <description>&lt;p&gt;This is an example of a test blog post. I am blogging now.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;appID&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;appSecret&lt;/code&gt; are details you get when you register the app with WeChat. With this link we can perform a &lt;em&gt;HTTP GET&lt;/em&gt; request, I used &lt;em&gt;Alamofire&lt;/em&gt; to do this. It should return the &lt;code class=&quot;highlighter-rouge&quot;&gt;openID&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt; which can then be used for &lt;em&gt;OAuth&lt;/em&gt; registering and login.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;This is a line of test code&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  QuizzesSelectChallengeViewController.swift&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  something&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  Created by LF on 28/12/2016.&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  Copyright (c) 2016 something. All rights reserved.&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  This file was generated by the Clean Swift Xcode Templates so you can apply blahb fsfsdfdsfdsf&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//  clean architecture to your iOS and Mac projects, see http://clean-swift.com sfsfdsfdsfsdf&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;numberOfSections&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;collectionView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UICollectionView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collectionView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;nf&quot;&gt;fatalError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;should never call&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;bonus-getting-the-users-profile-image&quot;&gt;3 - BONUS! Getting the User’s Profile Image&lt;/h4&gt;
 
+&lt;p&gt;Finally we can go one step further and try to get the WeChat user’s nickname and profile photo. Very similar to before we create a new link using the &lt;code class=&quot;highlighter-rouge&quot;&gt;openID&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;accessToken&lt;/code&gt; we obtained in the step before.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;userInfoPrefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://api.weixin.qq.com/sns/userinfo?&quot;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;buildUserInfoLink&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;withOpenID&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;openID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;accessToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userInfoPrefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;access_token=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;accessToken&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&amp;amp;openid=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;openID&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Again, perform a HTTP GET request and the JSON will return the nickname and profile photo link!&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading, hope this is helpful to some. Any questions or comments please leave below.&lt;/p&gt;
 </description>
-				<pubDate>Tue, 11 Oct 2016 00:00:00 +0800</pubDate>
-				<link>http://localhost:4000/2016-10-11/a-test-blog-post/</link>
-				<guid isPermaLink="true">http://localhost:4000/2016-10-11/a-test-blog-post/</guid>
+				<pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/2017-01-31/how-to-implement-ios-wechat-login/</link>
+				<guid isPermaLink="true">http://localhost:4000/2017-01-31/how-to-implement-ios-wechat-login/</guid>
 			</item>
 		
 	</channel>
