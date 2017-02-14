@@ -2,7 +2,7 @@
 
 layout: post
 title: How To Always Get The Topmost View Controller The Swifty Way
-description: Getting the currently displayed view controller is not always as easy as asking the navigation controller what it is presenting. Here is how to recurse yourself all the way to the top view controller.
+description: Getting the currently displayed view controller is not always as easy as asking the navigation controller what it's presenting. Here is how to recurse yourself all the way to the top view controller.
 tags: iOS
 
 ---
