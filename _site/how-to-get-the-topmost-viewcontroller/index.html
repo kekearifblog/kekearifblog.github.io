@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How To Always Get The Topmost View Controller The Swifty Way</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/assets/css/social-share-kit.css" type="text/css">
+
+  <!-- Font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Keke Arif" href="/feed.xml" />
+  <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How To Always Get The Topmost View Controller The Swifty Way - Keke Arif</title>
+<meta property="og:title" content="How To Always Get The Topmost View Controller The Swifty Way" />
+<meta name="description" content="Getting the currently displayed view controller is not always as easy as asking the navigation controller what it is presenting. Here is how to recurse yourself all the way to the top view controller." />
+<meta property="og:description" content="Getting the currently displayed view controller is not always as easy as asking the navigation controller what it is presenting. Here is how to recurse yourself all the way to the top view controller." />
+<link rel="canonical" href="http://localhost:4000/how-to-get-the-topmost-viewcontroller/" />
+<meta property="og:url" content="http://localhost:4000/how-to-get-the-topmost-viewcontroller/" />
+<meta property="og:site_name" content="Keke Arif" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-02-14T00:00:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How To Always Get The Topmost View Controller The Swifty Way",
+"datePublished": "2017-02-14T00:00:00+08:00",
+"description": "Getting the currently displayed view controller is not always as easy as asking the navigation controller what it is presenting. Here is how to recurse yourself all the way to the top view controller.",
+"url": "http://localhost:4000/how-to-get-the-topmost-viewcontroller/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-89675183-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <header>
+  <h1 class="header-small">
+    <a href="http://localhost:4000">Keke Arif</a>
+  </h1>
+</header>
+<div class="post">
+  <h1 class="post-title">How To Always Get The Topmost View Controller The Swifty Way</h1>
+  <span class="post-date">
+    <time>14 Feb 2017</time>
+  </span>
+  <div class="post-tag">
+    <ul>
+      
+      <li>
+        <a href="http://localhost:4000/tags#iOS" class="tag">
+          <span class="term">iOS</span>
+        </a>
+      </li>
+      
+      
+    </ul>
+  </div>
+
+  <p>I have recently been working on a number of custom alert view controllers. These are usually presented from <em>inside</em>  another view controller using:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">someViewController</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">alert</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span><span class="o">.</span></code></pre></figure>
+
+<p>However it’s much nicer if these alerts can be called and presented from anywhere in the codebase. The <code class="highlighter-rouge">UIWindow</code> extension below uses recursion and always returns the controller on top.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">UIWindow</span> <span class="p">{</span>
+
+    <span class="kd">func</span> <span class="nf">topMostViewController</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">rootViewController</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">rootViewController</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">nil</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nf">topViewController</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">rootViewController</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">topViewController</span><span class="p">(</span><span class="k">for</span> <span class="nv">rootViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">UIViewController</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">rootViewController</span> <span class="o">=</span> <span class="n">rootViewController</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">nil</span>
+        <span class="p">}</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">presentedViewController</span> <span class="o">=</span> <span class="n">rootViewController</span><span class="o">.</span><span class="n">presentedViewController</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">rootViewController</span>
+        <span class="p">}</span>
+        <span class="k">switch</span> <span class="n">presentedViewController</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">UINavigationController</span><span class="p">:</span>
+            <span class="k">let</span> <span class="nv">navigationController</span> <span class="o">=</span> <span class="n">presentedViewController</span> <span class="k">as!</span> <span class="kt">UINavigationController</span>
+            <span class="k">return</span> <span class="nf">topViewController</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">navigationController</span><span class="o">.</span><span class="n">viewControllers</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">UITabBarController</span><span class="p">:</span>
+            <span class="k">let</span> <span class="nv">tabBarController</span> <span class="o">=</span> <span class="n">presentedViewController</span> <span class="k">as!</span> <span class="kt">UITabBarController</span>
+            <span class="k">return</span> <span class="nf">topViewController</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">tabBarController</span><span class="o">.</span><span class="n">selectedViewController</span><span class="p">)</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">topViewController</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">presentedViewController</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span></code></pre></figure>
+
+<p>Very Swifty looking and should cover all bases with the <code class="highlighter-rouge">UINavigationController</code> and <code class="highlighter-rouge">UITabBarController</code> checks. Alerts can now be called anywhere in the code like so:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">guard</span> <span class="k">let</span> <span class="nv">currentViewController</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">keyWindow</span><span class="p">?</span><span class="o">.</span><span class="nf">topMostViewController</span><span class="p">()</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+<span class="n">currentViewController</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">alert</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span><span class="o">.</span></code></pre></figure>
+
+<p>Thanks for reading. Feel free to follow me on Twitter if it was useful! &lt;img class=’emoji’ title=’<img class="emoji" title=":smile:" alt=":smile:" src="https://assets.github.com/images/icons/emoji/unicode/1f604.png" height="20" width="20" align="absmiddle" />’ alt=’<img class="emoji" title=":smile:" alt=":smile:" src="https://assets.github.com/images/icons/emoji/unicode/1f604.png" height="20" width="20" align="absmiddle" />’ src=’https://assets.github.com/images/icons/emoji/unicode/1f604.png’ height=’20’ width=’20’ align=’absmiddle’ /&gt;</p>
+
+
+
+  <!-- Share -->
+  
+  <div class="post-share">
+    <hr>
+    <span>Share this: <br /></span>
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/how-to-get-the-topmost-viewcontroller/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-facebook"></a>
+<a href="https://twitter.com/intent/tweet?text=How To Always Get The Topmost View Controller The Swifty Way&url=http://localhost:4000/how-to-get-the-topmost-viewcontroller/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-twitter"></a>
+<a href="https://plus.google.com/share?url=http://localhost:4000/how-to-get-the-topmost-viewcontroller/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-google-plus"></a>
+<a href="https://www.tumblr.com/share?url=http://localhost:4000/how-to-get-the-topmost-viewcontroller/" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="ssk ssk-icon ssk-tumblr"></a>
+<a href="mailto:?subject=How To Always Get The Topmost View Controller The Swifty Way&amp;body=Check out this site http://localhost:4000/how-to-get-the-topmost-viewcontroller/" class="ssk ssk-icon ssk-email"></a>
+
+    <hr>
+  </div>
+  
+
+  <!-- Disqus -->
+  
+  <section id="disqus_thread"></section>
+  <script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//kekearif.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+	<hr />
+	<div class="footer-link">
+		
+
+		
+		<a href="https://twitter.com/keke_arif"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+		
+
+		
+
+		
+
+		
+
+		
+		<a href="mailto:kekearif@googlemail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+		
+
+		
+		<a href="https://github.com/kekearif"><i class="fa fa-github" aria-hidden="true"></i></a>
+		
+
+		
+		<a href="http://www.kekearif.com/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a>
+		
+
+	</div>
+	© 2017 Keke Arif. All rights reserved.
+</div>
+
+  </div>
+</body>
+</html>
