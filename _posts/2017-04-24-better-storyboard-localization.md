@@ -56,7 +56,6 @@ You can even add an extension for `UIViewController` to add a key for the view c
 {% highlight swift %}
 import Foundation
 
-
 extension UIViewController {
 
     @IBInspectable var stringId: String {
