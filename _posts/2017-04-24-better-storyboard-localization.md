@@ -2,12 +2,12 @@
 
 layout: post
 title: Better Storyboard Localization in XCode with IBInspectables
-description: How to localize Storyboards and xib files using IBInspectables and avoid endlessly generating new .string files.
+description: How to localize storyboards and xib files using IBInspectables and avoid endlessly generating new .string files!
 tags: iOS localization storyboard
 
 ---
 
-Localizing xibs and Storyboards in XCode can be very cumbersome. If a new UI elements are added at a later date the `.string files` have to be regenerated or the `Object ID` manually inserted to add the new translations. The biggest issue I had was trying to automate the process of adding a new language for my company's app. They would provide a new spreadsheet with the key names and strings for use with `NSLocalizedString`. This works great for anything out of the Storyboards and .xibs, just copy and paste into the new `Localization.strings` file and done! :beer: What about all those translations sitting in the UI though? The first obvious option to fix this is just not localizing the files at all. All the labels, text fields, buttons and various other elements can have their IBOutlets connected to the view controller or view and have their values initialized in `viewDidLoad` or the relevant view's initializer, this makes for more mess though - which I don't like.
+Localizing xibs and storyboards in XCode can be very cumbersome. If a new UI elements are added at a later date the `.string files` have to be regenerated or the `Object ID` manually inserted to add the new translations. The biggest issue I had was trying to automate the process of adding a new language for my company's app. They would provide a new spreadsheet with the key names and strings for use with `NSLocalizedString`. This works great for anything out of the storyboards and .xibs, just copy and paste into the new `Localization.strings` file and done! :beer: What about all those translations sitting in the UI though? The first obvious option to fix this is just not localizing the files at all. All the labels, text fields, buttons and various other elements can have their IBOutlets connected to the view controller or view and have their values initialized in `viewDidLoad` or the relevant view's initializer, this makes for more mess though - which I don't like.
 
 Luckily the magic of IBInspectables can help clean things up a bit. I first created a small extension for `UILabel` like so:
 
