@@ -71,4 +71,4 @@ extension UIViewController {
 }
 {% endhighlight %}
 
-Thanks for reading. Please leave a comment or share if you find this article useful or if you have your own different approach to localization.
+Thanks for reading! Please leave a comment or share if you find this article useful or if you have your own different approach to localization.
