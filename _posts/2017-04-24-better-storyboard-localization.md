@@ -2,7 +2,7 @@
 
 layout: post
 title: Better Storyboard Localization in XCode with IBInspectables
-description: How to localize Storyboards and xib files using IBInspectables and avoid endlessly generating new .String files.
+description: How to localize Storyboards and xib files using IBInspectables and avoid endlessly generating new .string files.
 tags: iOS localization storyboard
 
 ---
