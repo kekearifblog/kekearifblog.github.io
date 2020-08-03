@@ -1,4 +1,11 @@
-# A Simple Guide to React Context with Hooks
+---
+
+layout: post
+title: A Simple Guide to React Context with Hooks
+description: The simplest possible guide to understanding React Context with Hooks.
+tags: ReactJS Javascript
+
+---
 
 It took me a while to get my head around using React Context with hooks, all the tutorials I read failed to explain it in a simple manner or seemed focused on class syntax. The class syntax is due to die soon so let me give it a try.
 ## Why use Context?
