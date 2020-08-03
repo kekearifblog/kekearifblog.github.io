@@ -1,4 +1,11 @@
-# Understanding State and Lifecycle in React
+---
+
+layout: post
+title: Understanding State and Lifecycle in React
+description: Make sure you understand the React component lifecycle or you will run into issues later.
+tags: ReactJS Javascript
+
+---
 
 When does a component re-render? What about mounting? It's easy to just rush over these concepts and continue on with a shallow understanding, however they will eventually come back to bite you. Let's clear them up once and for all.
 
