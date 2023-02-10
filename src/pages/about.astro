@@ -1,0 +1,13 @@
+---
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Layout from "@layouts/Layout.astro";
+import About from "@layouts/About.astro";
+import { SITE } from "@config";
+---
+
+<Layout title={`Tags | ${SITE.title}`}>
+  <Header activeNav="about" />
+  <About pageTitle="About" pageDesc = "A British gentleman currently based in Taipei, Taiwan. I specialize in Swift development for iOS, but also enjoy fooling around with React JS. This blog is powered by Astro and Tailwind. Hosted on Github Pages."/>
+  <Footer />
+</Layout>
