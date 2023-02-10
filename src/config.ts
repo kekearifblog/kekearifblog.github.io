@@ -4,7 +4,7 @@ export const SITE = {
   website: "https://kekearif.com/",
   author: "Keke Arif",
   desc: "Personal website of Keke Arif, an iOS Engineer based in Taiwan.",
-  title: "KekeArif",
+  title: "keke_arif",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 3,
