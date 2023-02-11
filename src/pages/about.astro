@@ -3,7 +3,7 @@ import { SITE } from "@config";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
-import Layout from "./Layout.astro";
+import Layout from "@layouts/Layout.astro";
 
 export interface Props {
   frontmatter: {
@@ -15,17 +15,21 @@ export interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={`${frontmatter.title} | ${SITE.title}`}>
+<Layout title="About">
   <Header activeNav="about" />
   <Breadcrumbs />
   <main id="main-content">
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0">
-      <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
+      <h1 class="text-2xl tracking-wider sm:text-3xl">About</h1>
       <div class="bio-container">
-        <!-- <img class="bio-image" src="/assets/profile.png"/> -->
-        <!-- <div class="spacer" /> -->
+        <div class="bio-image-container">
+            <img class="bio-image" src="/assets/profile.png"/>
+        </div>
+        <div class="spacer" />
         <div class="text-container">
-          <slot />
+            <p style="margin: 0;">
+                A British gentleman currently based in Taipei, Taiwan. I specialize in Swift development for iOS, but also enjoy fooling around with React JS. This blog is powered by Astro and Tailwind. Hosted on Github Pages.
+            </p>
         </div>
       </div>
     </section>
@@ -40,16 +44,20 @@ const { frontmatter } = Astro.props;
   .spacer {
     width: 50px;
   }
-  .text-container {
-    background: blue;
-    padding: 0;
-  }
   .bio-image {
     border-radius: 100%;
     width: 100px;
     height: 100px;
     border: 1.4px solid;
     @apply border-skin-line;
+   
+  }
+  .bio-image-container {
+      margin-left: auto;
+      margin-right: auto;
+      height: 100px;
+      width: 100px;
+      flex-shrink: 0;
   }
   /* Mobile Styles */
   @media only screen and (max-width: 400px) {
@@ -59,7 +67,7 @@ const { frontmatter } = Astro.props;
       margin-right: auto;
     }
     .spacer {
-      width: 70px;
+      height: 25px;
     }
     .bio-container {
       flex-direction: column;
