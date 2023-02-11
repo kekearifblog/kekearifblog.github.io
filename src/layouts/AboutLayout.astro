@@ -22,11 +22,9 @@ const { frontmatter } = Astro.props;
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0">
       <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
       <div class="bio-container">
-        <div class="bio-image-container">
-            <img class="bio-image" src="/assets/profile.png"/>
-        </div>
-        <div class="spacer" />
-        <div style="background: blue;">
+        <!-- <img class="bio-image" src="/assets/profile.png"/> -->
+        <!-- <div class="spacer" /> -->
+        <div class="text-container">
           <slot />
         </div>
       </div>
@@ -42,17 +40,16 @@ const { frontmatter } = Astro.props;
   .spacer {
     width: 50px;
   }
-  .bio-image-container {
-    flex-shrink: 0;
-    width: 100px;
-    background: red;
+  .text-container {
+    background: blue;
+    padding: 0;
   }
   .bio-image {
     border-radius: 100%;
     width: 100px;
     height: 100px;
     border: 1.4px solid;
-    @apply border-skin-line
+    @apply border-skin-line;
   }
   /* Mobile Styles */
   @media only screen and (max-width: 400px) {
