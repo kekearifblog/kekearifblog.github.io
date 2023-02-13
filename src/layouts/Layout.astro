@@ -85,6 +85,20 @@ const fallbackImageURL = new URL(SITE.ogImage, Astro.url.origin).href;
     }
 
     <script is:inline src="/toggle-theme.js"></script>
+
+    <script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=UA-89675183-1">
+    </script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-89675183-1");
+   </script>
+
   </head>
   <body>
     <slot />

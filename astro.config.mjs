@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
+import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
@@ -11,26 +12,24 @@ export default defineConfig({
   integrations: [
     tailwind({
       config: {
-        applyBaseStyles: false,
+        applyBaseStyles: false
+      }
+    }),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
       },
     }),
-    react(),
-    sitemap(),
+    react(), sitemap(),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkToc,
-      [
-        remarkCollapse,
-        {
-          test: "Table of contents",
-        },
-      ],
-    ],
+    remarkPlugins: [remarkToc, [remarkCollapse, {
+      test: "Table of contents"
+    }]],
     shikiConfig: {
       theme: "one-dark-pro",
-      wrap: false,
+      wrap: false
     },
-    extendDefaultPlugins: true,
-  },
+    extendDefaultPlugins: true
+  }
 });
