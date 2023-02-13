@@ -2,7 +2,7 @@
 author: Keke Arif
 pubDatetime: 2023-02-08T15:22:00Z
 title: Hooking into UIScrollView from SwiftUI ScrollView
-postSlug: one-from-the-archives
+postSlug: uiscrollview-swiftui
 featured: true
 draft: false
 tags:
