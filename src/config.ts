@@ -3,7 +3,7 @@ import type { SocialObjects } from "./types";
 export const SITE = {
   website: "https://kekearif.com/",
   author: "Keke Arif",
-  desc: "Personal website of Keke Arif, an iOS Engineer based in Taiwan.",
+  desc: "Personal website of Keke Arif, a British iOS Engineer based in Taiwan.",
   title: "keke_arif",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
